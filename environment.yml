@@ -18,9 +18,11 @@ dependencies:
   - ipywidgets
   - tqdm
   - pyyaml
+  # PyTorch from conda-forge (not pip). This prevents the OpenMP
+  # conflict (OMP Error #15) on macOS.
+  - pytorch>=2.4
+  - torchvision>=0.19
   - pip:
-      - torch>=2.4
-      - torchvision>=0.19
       - transformers>=4.45
       - huggingface_hub>=0.25
       - safetensors>=0.4
