@@ -1,0 +1,8 @@
+method,scaling,absrel,rmse,delta1
+Constant median (baseline),None,0.603,18.31,0.256
+DAv2 Small,Median scaling,0.352,8.29,0.528
+DAv2 Small,LSQ (disparity),0.312,14.09,0.44
+DAv2 Base,Median scaling,0.375,7.45,0.524
+DAv2 Base,LSQ (disparity),0.321,13.31,0.418
+ZoeDepth NYU+KITTI,Median scaling,0.575,16.137,0.279
+ZoeDepth NYU+KITTI,LSQ (depth),0.423,6.601,0.451
