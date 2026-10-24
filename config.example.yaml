@@ -1,0 +1,12 @@
+# Copy this file to config.yaml and set your own paths.
+# Use forward slashes on all systems, also on Windows (C:/Users/...).
+
+data_root: /path/to/C3VD
+dev_sequence: trans_t1_a
+test_sequence: trans_t2_b
+results_root: results
+
+# auto = CUDA if available, then MPS (Apple), then CPU.
+device: auto
+
+seed: 42

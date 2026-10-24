@@ -1,0 +1,28 @@
+name: endodepth
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - numpy>=1.26
+  - scipy>=1.11
+  - pandas>=2.1
+  - tifffile>=2023.9
+  - pillow>=10.0
+  - opencv>=4.8
+  - scikit-image>=0.22
+  - matplotlib>=3.8
+  - seaborn>=0.13
+  - jupyterlab>=4.0
+  - ipykernel
+  - ipywidgets
+  - tqdm
+  - pyyaml
+  - pip:
+      - torch>=2.4
+      - torchvision>=0.19
+      - transformers>=4.45
+      - huggingface_hub>=0.25
+      - safetensors>=0.4
+      - timm>=0.9
+      - peft>=0.12
