@@ -1,0 +1,12 @@
+Setting,Value
+Development sequence,trans_t1_a
+Test sequence,trans_t2_b
+Development frames,61
+Test frames,103
+Median depth (mm),17.259479522705078
+GT valid minimum,gt > 0
+GT valid maximum,gt < 100
+Metric aggregation,Mean of per-frame metrics
+Baseline AbsRel,0.5499021512446318
+Baseline RMSE,17.691577750689145
+Baseline Delta1,0.2751539914629186
