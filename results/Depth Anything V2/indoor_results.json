@@ -1,0 +1,14 @@
+{
+    "model": "Depth Anything V2 Large Indoor",
+    "encoder": "vitl",
+    "development_sequence": "trans_t1_a",
+    "test_sequence": "trans_t2_b",
+    "scale": 0.031549133360385895,
+    "offset": -13.024480819702148,
+    "MAE_mm": 5.455915927886963,
+    "AbsRel": 0.2675745189189911,
+    "RMSE_mm": 7.721266269683838,
+    "Delta_1.25": 0.4800117036047491,
+    "valid_mask": "gt_raw > 0",
+    "input_size": 518
+}

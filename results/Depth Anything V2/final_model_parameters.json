@@ -1,0 +1,27 @@
+{
+    "model": "Depth Anything V2 Small",
+    "improvement": "Smooth Depth-Dependent Bias Correction",
+    "development_dataset": "trans_t1_a",
+    "test_dataset": "trans_t2_b",
+    "scale": 14.802687644958496,
+    "offset": 69.5309829711914,
+    "median_depth_mm": 17.582971572875977,
+    "bin_centers_mm": [
+        10,
+        30,
+        50,
+        70
+    ],
+    "correction_values_mm": [
+        1.8522336951282028,
+        -5.170286320840709,
+        -5.012839785458647,
+        20.718349319214305
+    ],
+    "evaluation_mask": "gt_raw > 0",
+    "depth_range_mm": [
+        0,
+        100
+    ],
+    "input_size": 518
+}

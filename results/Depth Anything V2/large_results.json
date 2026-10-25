@@ -1,0 +1,14 @@
+{
+    "model": "Depth Anything V2 Large",
+    "encoder": "vitl",
+    "development_sequence": "trans_t1_a",
+    "test_sequence": "trans_t2_b",
+    "scale": 0.222745880484581,
+    "offset": 75.89997863769531,
+    "MAE_mm": 5.018404960632324,
+    "AbsRel": 0.28380173444747925,
+    "RMSE_mm": 7.2076849937438965,
+    "Delta_1.25": 0.5531317456820493,
+    "valid_mask": "gt_raw > 0",
+    "input_size": 518
+}

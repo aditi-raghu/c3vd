@@ -1,0 +1,7 @@
+Model,MAE_mm,AbsRel,RMSE_mm,Delta_1.25
+Constant Median,12.976,0.5655,21.2086,0.2704
+Small + Linear,6.4007,0.37,8.7136,0.4162
+Small + Smooth Correction,4.653,0.2825,5.8733,0.5444
+Large + Linear,5.0184,0.2838,7.2077,0.5531
+Large Indoor + Linear,5.4559,0.2676,7.7213,0.48
+Large Outdoor + Linear,5.8892,0.3146,7.7711,0.4456

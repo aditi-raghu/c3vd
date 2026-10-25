@@ -1,0 +1,14 @@
+{
+    "model": "Depth Anything V2 Large Outdoor",
+    "encoder": "vitl",
+    "development_sequence": "trans_t1_a",
+    "test_sequence": "trans_t2_b",
+    "scale": 0.007487837690860033,
+    "offset": -34.026344299316406,
+    "MAE_mm": 5.889173984527588,
+    "AbsRel": 0.3145732581615448,
+    "RMSE_mm": 7.771112442016602,
+    "Delta_1.25": 0.4456324505754936,
+    "valid_mask": "gt_raw > 0",
+    "input_size": 518
+}
