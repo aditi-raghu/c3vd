@@ -1,0 +1,31 @@
+{
+  "python": "3.11.17",
+  "platform": "macOS-15.1-arm64-arm-64bit",
+  "torch": "2.13.0",
+  "transformers": "5.20.2",
+  "numpy": "2.4.6",
+  "device": "mps",
+  "seed": 42,
+  "model": "apple/DepthPro-hf",
+  "split": "test",
+  "frames": 103,
+  "flip_test": false,
+  "fine_tuned": false,
+  "input": "raw frames, Depth Pro processor only (1536x1536)",
+  "dev_constants": {
+    "gt>0": {
+      "median_mm": 17.582971572875977,
+      "dev_scale": 0.06734878569841385,
+      "dev_lsq_a": 0.19196945428848267,
+      "dev_lsq_b_mm": -31.255859375
+    },
+    "valid": {
+      "median_mm": 17.259479522705078,
+      "dev_scale": 0.06616178900003433,
+      "dev_lsq_a": 0.17045512795448303,
+      "dev_lsq_b_mm": -25.78875732421875
+    }
+  },
+  "mean_pred_fov_deg": 50.58616504854369,
+  "sec_per_frame": 3.85178306287465
+}
