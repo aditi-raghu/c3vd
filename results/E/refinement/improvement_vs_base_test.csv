@@ -1,0 +1,15 @@
+comparison,metric,without (base),with improvement,difference,change_%,better?
+Uncertainty-guided refinement vs Small + Smooth,MAE (mm),4.653,4.6199,-0.0331,-0.7,yes
+Uncertainty-guided refinement vs Small + Smooth,AbsRel,0.2825,0.2793,-0.0032,-1.1,yes
+Uncertainty-guided refinement vs Small + Smooth,RMSE (mm),5.8733,5.8359,-0.0374,-0.6,yes
+Uncertainty-guided refinement vs Small + Smooth,δ<1.25,0.5444,0.546,0.0016,0.3,yes
+Uncertainty-guided refinement vs Small + Smooth,AbsRel boundary,0.4388,0.4338,-0.005,-1.1,yes
+Uncertainty-guided refinement vs Small + Smooth,AbsRel flat,0.2624,0.2594,-0.003,-1.1,yes
+Uncertainty-guided refinement vs Small + Smooth,frames with lower AbsRel,,101/103,,,
+Ensemble + uncertainty-guided refinement vs Small + Smooth,MAE (mm),4.653,4.2823,-0.3707,-8.0,yes
+Ensemble + uncertainty-guided refinement vs Small + Smooth,AbsRel,0.2825,0.258,-0.0245,-8.7,yes
+Ensemble + uncertainty-guided refinement vs Small + Smooth,RMSE (mm),5.8733,5.5262,-0.347,-5.9,yes
+Ensemble + uncertainty-guided refinement vs Small + Smooth,δ<1.25,0.5444,0.59,0.0456,8.4,yes
+Ensemble + uncertainty-guided refinement vs Small + Smooth,AbsRel boundary,0.4388,0.4161,-0.0227,-5.2,yes
+Ensemble + uncertainty-guided refinement vs Small + Smooth,AbsRel flat,0.2624,0.2377,-0.0247,-9.4,yes
+Ensemble + uncertainty-guided refinement vs Small + Smooth,frames with lower AbsRel,,100/103,,,
