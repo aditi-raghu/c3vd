@@ -100,3 +100,76 @@ CFG = load_config()
 SEED = CFG.get("seed", 42)
 set_seed(SEED)
 DEVICE = get_device(CFG.get("device", "auto"))
+
+
+# ---------- Shared data, metrics and alignment (group protocol v1) ----------
+import cv2
+import tifffile
+import pandas as pd
+
+
+def list_frames(cfg, split):
+    return sorted(sequence_dir(cfg, split).glob("*_color.png"))
+
+
+def load_frame(color_path):
+    rgb = cv2.cvtColor(cv2.imread(str(color_path)), cv2.COLOR_BGR2RGB)
+    depth_path = color_path.with_name(color_path.name.replace("_color.png", "_depth.tiff"))
+    raw = tifffile.imread(depth_path)
+    gt_mm = raw.astype(np.float32) / 65535.0 * 100.0
+    valid = (raw > 0) & (raw < 65535) & (rgb.max(axis=2) > 10)
+    return rgb, gt_mm, valid
+
+
+def compute_metrics(pred_mm, gt_mm, valid):
+    p = np.clip(pred_mm[valid], 1e-3, None)
+    g = gt_mm[valid]
+    return {
+        "absrel": float(np.mean(np.abs(p - g) / g)),
+        "rmse": float(np.sqrt(np.mean((p - g) ** 2))),
+        "mae": float(np.mean(np.abs(p - g))),
+        "delta1": float(np.mean(np.maximum(p / g, g / p) < 1.25)),
+    }
+
+
+def to_relative_depth(pred, output_type):
+    """output_type = 'depth' (ZoeDepth, metric DAv2) or 'disparity' (DAv2 relative, MiDaS, DPT)."""
+    if output_type == "disparity":
+        return 1.0 / np.clip(pred, 1e-6, None)
+    return pred
+
+
+def align_median(rel, gt, valid):
+    """Per-image median scaling. Uses the GT of each frame (standard protocol)."""
+    return rel * (np.median(gt[valid]) / np.median(rel[valid]))
+
+
+def align_lsq(rel, gt, valid):
+    """Per-image scale and shift. Uses the GT of each frame."""
+    A = np.stack([rel[valid], np.ones(valid.sum())], axis=1)
+    (a, b), *_ = np.linalg.lstsq(A, gt[valid], rcond=None)
+    return rel * a + b
+
+
+def fit_global_lsq(rels, gts, valids):
+    """One scale and shift for many frames (fit on dev, apply without GT)."""
+    P = np.concatenate([r[v] for r, v in zip(rels, valids)])
+    G = np.concatenate([g[v] for g, v in zip(gts, valids)])
+    A = np.stack([P, np.ones_like(P)], axis=1)
+    (a, b), *_ = np.linalg.lstsq(A, G, rcond=None)
+    return float(a), float(b)
+
+
+def dev_blocks(n_frames, n_blocks=4):
+    """Blocks of neighbouring frames for block cross-validation."""
+    return np.array_split(np.arange(n_frames), n_blocks)
+
+
+RESULT_COLUMNS = ["model", "output_type", "alignment", "fit_on", "split",
+                  "absrel", "rmse", "mae", "delta1", "n_frames"]
+
+
+def save_summary(rows, out_dir, name):
+    df = pd.DataFrame(rows)[RESULT_COLUMNS]
+    df.to_csv(Path(out_dir) / f"{name}_summary.csv", index=False)
+    return df

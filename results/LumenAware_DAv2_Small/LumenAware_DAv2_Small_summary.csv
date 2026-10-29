@@ -1,0 +1,7 @@
+model,output_type,alignment,fit_on,split,absrel,rmse,mae,delta1,n_frames
+DAv2 Small DAv2 Small,disparity,per_image_median,gt_per_image,dev,0.38610334132538465,25.678050713460955,8.412138774746754,0.5144162613283341,61
+DAv2 Small + global affine,disparity,correction_affine_both,dev_blocks_cv,dev,0.38873152793792004,24.771952676994765,8.230056016751648,0.5153254225219496,61
+DAv2 Small + global nonlinear,disparity,correction_nonlinear_both,dev_blocks_cv,dev,0.2736622836316647,7.541382778200188,4.68770928596052,0.5705152772877707,61
+DAv2 Small + lumen-aware (darkness only),disparity,correction_lumen_dark,dev_blocks_cv,dev,0.2699680280962086,7.279061268968253,4.666402369331367,0.5696337066128417,61
+DAv2 Small + lumen-aware (depth only),disparity,correction_lumen_far,dev_blocks_cv,dev,0.26420477206639537,7.247058484000358,4.652628291914487,0.5540926563164892,61
+DAv2 Small + lumen-aware (both cues),disparity,correction_lumen_both,dev_blocks_cv,dev,0.28049324593704006,7.692265036843756,4.708345839265204,0.575111876531615,61

@@ -1,0 +1,8 @@
+model,output_type,alignment,fit_on,split,absrel,rmse,mae,delta1,n_frames
+DAv2 Small Constant median,disparity,none,dev_blocks_cv,dev,0.6053055994188343,18.314563146134187,12.063993341796355,0.25211452491154757,61
+DAv2 Small DAv2 + global linear,disparity,global_lsq,dev_blocks_cv,dev,0.313559322253462,7.410050443311788,5.569766208260666,0.4543948739230763,61
+DAv2 Small + smooth correction,disparity,global_lsq,dev_blocks_cv,dev,0.27110982750622975,6.09623983933707,4.634331954198585,0.5337231627758657,61
+DAv2 Small + lumen-aware (darkness only),disparity,global_lsq,dev_blocks_cv,dev,0.2605180351065782,5.508258624544263,4.255855547974166,0.5591941888384315,61
+DAv2 Small + lumen-aware (depth only),disparity,global_lsq,dev_blocks_cv,dev,0.26896808327501964,6.058648223755412,4.589506803339545,0.5378009447516022,61
+DAv2 Small + lumen-aware (both cues),disparity,global_lsq,dev_blocks_cv,dev,0.2663271915041023,5.9276633161478,4.520979093099241,0.5439238543238383,61
+DAv2 Small + lumen-aware 2D table,disparity,global_lsq,dev_blocks_cv,dev,0.2663271915041023,5.9276633161478,4.520979093099241,0.5439238543238383,61
