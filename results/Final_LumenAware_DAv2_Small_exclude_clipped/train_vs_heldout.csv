@@ -1,0 +1,65 @@
+method,fold,part,absrel
+Constant median,1,held-out,0.6358718465830736
+Constant median,1,train,0.5670628344793051
+DAv2 + global linear,1,held-out,0.3497120021327488
+DAv2 + global linear,1,train,0.26451516185812435
++ smooth correction,1,held-out,0.30554960830439737
++ smooth correction,1,train,0.21766892586635908
++ lumen-aware (darkness only),1,held-out,0.29374277582323727
++ lumen-aware (darkness only),1,train,0.21246397665712824
++ lumen-aware (depth only),1,held-out,0.30436049639011015
++ lumen-aware (depth only),1,train,0.21642560458354845
++ lumen-aware (both cues),1,held-out,0.29905286060076475
++ lumen-aware (both cues),1,train,0.2157785860404596
+Isotonic (log),1,held-out,0.2623634248782555
+Isotonic (log),1,train,0.17648375887142576
+Lumen-aware isotonic (log),1,held-out,0.2602707250473729
+Lumen-aware isotonic (log),1,train,0.17419977107268325
+Constant median,2,held-out,0.6551862120688134
+Constant median,2,train,0.585929731340714
+DAv2 + global linear,2,held-out,0.33149423825625896
+DAv2 + global linear,2,train,0.27236057940894837
++ smooth correction,2,held-out,0.26453085983106817
++ smooth correction,2,train,0.237202449662394
++ lumen-aware (darkness only),2,held-out,0.25267777359837307
++ lumen-aware (darkness only),2,train,0.2309350780125674
++ lumen-aware (depth only),2,held-out,0.26267139136023826
++ lumen-aware (depth only),2,train,0.2367287077363066
++ lumen-aware (both cues),2,held-out,0.2603048978687938
++ lumen-aware (both cues),2,train,0.23286999063190456
+Isotonic (log),2,held-out,0.19747298044878817
+Isotonic (log),2,train,0.2038930510178786
+Lumen-aware isotonic (log),2,held-out,0.19522517589759028
+Lumen-aware isotonic (log),2,train,0.20054093111952676
+Constant median,3,held-out,0.5901670736318241
+Constant median,3,train,0.639124982884115
+DAv2 + global linear,3,held-out,0.2151114366441952
+DAv2 + global linear,3,train,0.2861237689125217
++ smooth correction,3,held-out,0.18809507808438383
++ smooth correction,3,train,0.24681022978794745
++ lumen-aware (darkness only),3,held-out,0.18352244885809318
++ lumen-aware (darkness only),3,train,0.23789513354096517
++ lumen-aware (depth only),3,held-out,0.18763966106042365
++ lumen-aware (depth only),3,train,0.24583319991290678
++ lumen-aware (both cues),3,held-out,0.18574565144781324
++ lumen-aware (both cues),3,train,0.24267641407787666
+Isotonic (log),3,held-out,0.17425537362771842
+Isotonic (log),3,train,0.2057131724418062
+Lumen-aware isotonic (log),3,held-out,0.1695583532513771
+Lumen-aware isotonic (log),3,train,0.20335368987624
+Constant median,4,held-out,0.5379595155806765
+Constant median,4,train,0.6223911483498266
+DAv2 + global linear,4,held-out,0.25750312952577104
+DAv2 + global linear,4,train,0.2759605696013895
++ smooth correction,4,held-out,0.22508734649488132
++ smooth correction,4,train,0.23700020918444425
++ lumen-aware (darkness only),4,held-out,0.2211026445612893
++ lumen-aware (darkness only),4,train,0.2293424740714687
++ lumen-aware (depth only),4,held-out,0.22939775853811667
++ lumen-aware (depth only),4,train,0.23559498626563108
++ lumen-aware (both cues),4,held-out,0.22415910340102882
++ lumen-aware (both cues),4,train,0.23324549110337447
+Isotonic (log),4,held-out,0.20871978788909704
+Isotonic (log),4,train,0.19163030675769888
+Lumen-aware isotonic (log),4,held-out,0.2056914560016474
+Lumen-aware isotonic (log),4,train,0.1894416210675169

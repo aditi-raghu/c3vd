@@ -1,0 +1,19 @@
+{
+  "python": "3.11.17",
+  "platform": "macOS-27.0-arm64-arm-64bit",
+  "torch": "2.13.0",
+  "transformers": "5.20.2",
+  "numpy": "2.4.6",
+  "device": "mps",
+  "seed": 42,
+  "model": "depth-anything/Depth-Anything-V2-Small-hf",
+  "mask": "exclude_clipped",
+  "input_size": [
+    700,
+    868
+  ],
+  "sigma": 20,
+  "tau": 0.5,
+  "n_blocks": 4,
+  "gap": 2
+}
