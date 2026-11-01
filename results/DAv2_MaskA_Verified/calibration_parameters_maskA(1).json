@@ -1,0 +1,57 @@
+{
+    "Small": {
+        "scale": 13.321026124555381,
+        "offset": 64.22639769237846,
+        "dev_valid_pixels": 80948601,
+        "raw_units": "relative"
+    },
+    "Small_smooth": {
+        "bin_centers_mm": [
+            10.0,
+            30.0,
+            50.0,
+            70.0
+        ],
+        "corrections_mm": [
+            1.1854963545364376,
+            -4.0874931207761875,
+            1.642090078015836,
+            23.40272291776936,
+            0.0
+        ],
+        "bin_counts": [
+            43403338,
+            22633111,
+            14177279,
+            734873,
+            0
+        ],
+        "note": "Only first four bins interpolated; 80\u2013100 mm bin excluded from interpolation."
+    },
+    "Base": {
+        "scale": 7.024775607061375,
+        "offset": 68.17364863842701,
+        "dev_valid_pixels": 80948601,
+        "raw_units": "relative",
+        "inference": "Official DAv2 vitb infer_image",
+        "input_size": 518
+    },
+    "Large": {
+        "scale": 0.20152337107850277,
+        "offset": 70.30650360281635,
+        "dev_valid_pixels": 80948601,
+        "raw_units": "relative"
+    },
+    "Indoor": {
+        "scale": 0.03455463424189935,
+        "offset": -16.298106970906662,
+        "dev_valid_pixels": 80948601,
+        "raw_units": "meters"
+    },
+    "Outdoor": {
+        "scale": 0.006957463180969468,
+        "offset": -30.322914436493086,
+        "dev_valid_pixels": 80948601,
+        "raw_units": "meters"
+    }
+}
