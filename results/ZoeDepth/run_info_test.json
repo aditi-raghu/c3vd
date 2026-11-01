@@ -7,22 +7,22 @@
   "device": "mps",
   "seed": 42,
   "model": "Intel/zoedepth-nyu-kitti",
-  "flip_test": true,
+  "flip_test": false,
   "split": "test",
   "frames": 103,
-  "sec_per_frame": 1.2147624407759092,
+  "sec_per_frame": 0.6045256024506171,
   "dev_constants": {
     "A": {
       "median_mm": 17.259479522705078,
-      "dev_scale": 0.014133680197151114,
-      "dev_lsq_a": 0.09855087862362082,
-      "dev_lsq_b_mm": -104.9392291581629
+      "dev_scale": 0.014188319558882636,
+      "dev_lsq_a": 0.09898875685801743,
+      "dev_lsq_b_mm": -104.84678344348627
     },
     "B": {
       "median_mm": 17.582971572875977,
-      "dev_scale": 0.014384482254290171,
-      "dev_lsq_a": 0.0960271640904914,
-      "dev_lsq_b_mm": -101.71502467461521
+      "dev_scale": 0.014439750700889405,
+      "dev_lsq_a": 0.09708539849483919,
+      "dev_lsq_b_mm": -102.41987465500769
     }
   },
   "fit_stride": 4

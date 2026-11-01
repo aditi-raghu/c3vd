@@ -6,8 +6,9 @@
   "numpy": "2.4.6",
   "device": "mps",
   "seed": 42,
+  "mask_rule": "A",
   "model": "Intel/zoedepth-nyu-kitti",
-  "flip_test": true,
+  "flip_test": false,
   "split": "dev",
-  "sec_per_frame": 1.2600657881320028
+  "sec_per_frame": 0.6041981091334795
 }

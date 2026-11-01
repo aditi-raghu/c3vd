@@ -1,4 +1,4 @@
 method,scaling,absrel,rmse,delta1
-ZoeDepth NYU+KITTI,lsq_depth,0.423,6.601,0.451
-ZoeDepth NYU+KITTI,median,0.575,16.137,0.279
-ZoeDepth NYU+KITTI,none (metric x1000),85.573,1283.06,0.0
+ZoeDepth NYU+KITTI,lsq_depth,0.431,6.791,0.448
+ZoeDepth NYU+KITTI,median,0.575,16.167,0.279
+ZoeDepth NYU+KITTI,none (metric x1000),85.176,1276.279,0.0
