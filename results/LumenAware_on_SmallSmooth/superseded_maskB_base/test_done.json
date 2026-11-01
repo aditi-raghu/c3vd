@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-01T12:46:28",
+  "n_frames": 103,
+  "absrel_mask_A": {
+    "Base: Small + smooth (group)": 0.28525487002994304,
+    "+ lumen-aware residual (darkness)": 0.26359588554313385,
+    "+ lumen-aware residual (depth)": 0.26664284185667764,
+    "+ lumen-aware residual (both)": 0.2631052845712406,
+    "+ isotonic (log)": 0.20507223136845004,
+    "+ lumen-aware isotonic (log)": 0.20084745833823067
+  }
+}

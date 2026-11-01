@@ -1,0 +1,25 @@
+model,output_type,alignment,fit_on,split,mask,absrel,rmse,mae,delta1,n_frames
+DAv2 Small + smooth (group base),disparity,global_lsq + smooth,dev_blocks_cv,dev,A,0.284770684170565,5.958743815547383,4.7108546235072986,0.5074688290698179,61
+DAv2 Small + smooth + lumen-aware residual (darkness),disparity,global_lsq + smooth,dev_blocks_cv,dev,A,0.26657955318001586,5.382825682448966,4.241666191301797,0.5434545347480081,61
+DAv2 Small + smooth + lumen-aware residual (depth),disparity,global_lsq + smooth,dev_blocks_cv,dev,A,0.2734108903653018,5.739775517103417,4.475680520431828,0.5274789516786814,61
+DAv2 Small + smooth + lumen-aware residual (both),disparity,global_lsq + smooth,dev_blocks_cv,dev,A,0.26831612131728216,5.591001536064512,4.368932580768921,0.5349917727758616,61
+DAv2 Small + smooth + isotonic (log),disparity,global_lsq + smooth,dev_blocks_cv,dev,A,0.24149630874523245,5.592844639075203,4.206406313901881,0.5707980606984405,61
+DAv2 Small + smooth + lumen-aware isotonic (log),disparity,global_lsq + smooth,dev_blocks_cv,dev,A,0.23690901467911848,5.4042898018180665,4.079443388689229,0.5816541748294265,61
+DAv2 Small + smooth (group base),disparity,global_lsq + smooth,dev_blocks_cv,dev,B,0.28213026119775275,6.389660307903467,4.956080596631714,0.5139328563434838,61
+DAv2 Small + smooth + lumen-aware residual (darkness),disparity,global_lsq + smooth,dev_blocks_cv,dev,B,0.2638565806080506,5.758715352066411,4.448600852309001,0.5502174863396039,61
+DAv2 Small + smooth + lumen-aware residual (depth),disparity,global_lsq + smooth,dev_blocks_cv,dev,B,0.27063124342466843,6.111447126454324,4.686931538160233,0.5341945537443922,61
+DAv2 Small + smooth + lumen-aware residual (both),disparity,global_lsq + smooth,dev_blocks_cv,dev,B,0.26561579928205137,5.9664465682065355,4.579161554094012,0.5416683234999147,61
+DAv2 Small + smooth + isotonic (log),disparity,global_lsq + smooth,dev_blocks_cv,dev,B,0.2389896644885567,5.911897430334301,4.382112163497445,0.5774286466248943,61
+DAv2 Small + smooth + lumen-aware isotonic (log),disparity,global_lsq + smooth,dev_blocks_cv,dev,B,0.23448943249683876,5.733818547776446,4.256594755544024,0.5881029164806975,61
+DAv2 Small + smooth (group base),disparity,global_lsq + smooth,dev_all (base: frozen group params),test,A,0.28525487002994304,5.42820678643272,4.410002857529367,0.537771084080193,103
+DAv2 Small + smooth + lumen-aware residual (darkness),disparity,global_lsq + smooth,dev_all (base: frozen group params),test,A,0.26359588554313385,5.05889336412549,4.12289586445166,0.569074109688081,103
+DAv2 Small + smooth + lumen-aware residual (depth),disparity,global_lsq + smooth,dev_all (base: frozen group params),test,A,0.26664284185667764,5.208111664407685,4.252368086584403,0.5616074655393005,103
+DAv2 Small + smooth + lumen-aware residual (both),disparity,global_lsq + smooth,dev_all (base: frozen group params),test,A,0.2631052845712406,5.10895639901397,4.149348608557771,0.5727630245254116,103
+DAv2 Small + smooth + isotonic (log),disparity,global_lsq + smooth,dev_all (base: frozen group params),test,A,0.20507223136845004,4.84306439403009,3.8007119978111708,0.611277846825081,103
+DAv2 Small + smooth + lumen-aware isotonic (log),disparity,global_lsq + smooth,dev_all (base: frozen group params),test,A,0.20084745833823067,4.720536746778593,3.687166089138104,0.6284777846405429,103
+DAv2 Small + smooth (group base),disparity,global_lsq + smooth,dev_all (base: frozen group params),test,B,0.2825457308638037,5.873253541991774,4.653019978846286,0.5443947615800447,103
+DAv2 Small + smooth + lumen-aware residual (darkness),disparity,global_lsq + smooth,dev_all (base: frozen group params),test,B,0.2608927109349707,5.430783861349276,4.3265949499645,0.5761178127173067,103
+DAv2 Small + smooth + lumen-aware residual (depth),disparity,global_lsq + smooth,dev_all (base: frozen group params),test,B,0.263979791488312,5.595343319458471,4.46381641602849,0.5683569213948956,103
+DAv2 Small + smooth + lumen-aware residual (both),disparity,global_lsq + smooth,dev_all (base: frozen group params),test,B,0.2604846591114945,5.495513499101115,4.359346640543977,0.5794064156727375,103
+DAv2 Small + smooth + isotonic (log),disparity,global_lsq + smooth,dev_all (base: frozen group params),test,B,0.2033407877417506,5.179379948447437,3.982980620609539,0.6179725843259236,103
+DAv2 Small + smooth + lumen-aware isotonic (log),disparity,global_lsq + smooth,dev_all (base: frozen group params),test,B,0.19919305737295356,5.063032388557788,3.8704101226336176,0.6348173090683541,103

@@ -1,0 +1,20 @@
+{
+  "python": "3.11.17",
+  "platform": "macOS-27.0-arm64-arm-64bit",
+  "torch": "2.13.0",
+  "transformers": "5.20.2",
+  "numpy": "2.4.6",
+  "device": "mps",
+  "seed": 42,
+  "mask_rule": "A",
+  "base_model": "DAv2 Small + smooth (results/E/refinement/smooth_model.py)",
+  "input_size": 518,
+  "sigma": 20,
+  "tau": 0.5,
+  "n_blocks": 4,
+  "gap": 2,
+  "masks": [
+    "A",
+    "B"
+  ]
+}
