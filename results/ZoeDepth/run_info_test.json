@@ -1,0 +1,29 @@
+{
+  "python": "3.11.17",
+  "platform": "macOS-27.0-arm64-arm-64bit",
+  "torch": "2.13.0",
+  "transformers": "5.20.2",
+  "numpy": "2.4.6",
+  "device": "mps",
+  "seed": 42,
+  "model": "Intel/zoedepth-nyu-kitti",
+  "flip_test": true,
+  "split": "test",
+  "frames": 103,
+  "sec_per_frame": 1.2147624407759092,
+  "dev_constants": {
+    "A": {
+      "median_mm": 17.259479522705078,
+      "dev_scale": 0.014133680197151114,
+      "dev_lsq_a": 0.09855087862362082,
+      "dev_lsq_b_mm": -104.9392291581629
+    },
+    "B": {
+      "median_mm": 17.582971572875977,
+      "dev_scale": 0.014384482254290171,
+      "dev_lsq_a": 0.0960271640904914,
+      "dev_lsq_b_mm": -101.71502467461521
+    }
+  },
+  "fit_stride": 4
+}
