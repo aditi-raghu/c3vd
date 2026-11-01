@@ -1,0 +1,21 @@
+{
+  "python": "3.13.14",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "torch": "2.15.0+cpu",
+  "transformers": "5.22.1",
+  "numpy": "2.5.4",
+  "device": "cpu",
+  "seed": 42,
+  "mask_rule": "A",
+  "base_model": "DAv2 Small + smooth, Sowmya's mask-A calibration (results/DAv2_MaskA_Verified)",
+  "dav2_source": "cached predictions",
+  "input_size": 518,
+  "n_blocks": 4,
+  "gap": 2,
+  "masks": [
+    "A",
+    "B"
+  ],
+  "work_scale": 4,
+  "dav2_sec_per_frame": null
+}

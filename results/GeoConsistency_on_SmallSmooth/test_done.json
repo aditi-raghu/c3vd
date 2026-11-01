@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-01T16:35:36",
+  "n_frames": 103,
+  "absrel_mask_A": {
+    "Base: Small + smooth (group)": 0.27867577448555914,
+    "+ Gaussian smoothing": 0.2787173436731983,
+    "+ bilateral smoothing": 0.27862901712693766,
+    "+ geometry-consistency (full)": 0.2786509812733764,
+    "  - without RGB edge protection": 0.2786509812733764,
+    "  - without normal-consistency term": 0.27865081985191414
+  },
+  "verdict": "Geometry-consistency (full) vs base on test: AbsRel -0.0000 (95% CI [-0.0000, -0.0000], better); largest change of any filter 0.0000 AbsRel."
+}

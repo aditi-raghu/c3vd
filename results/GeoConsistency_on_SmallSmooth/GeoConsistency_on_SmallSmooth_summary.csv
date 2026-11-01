@@ -1,0 +1,25 @@
+model,output_type,alignment,fit_on,split,mask,absrel,rmse,mae,delta1,n_frames
+DAv2 Small + smooth (group base),disparity,global_lsq + smooth,dev_blocks_cv,dev,A,0.2798742743869048,6.0851902525051695,4.715346823857267,0.5069805191990706,61
+DAv2 Small + smooth + Gaussian smoothing,disparity,global_lsq + smooth,dev_blocks_cv,dev,A,0.279921093874074,6.08558416805718,4.715584992763738,0.5069524381677858,61
+DAv2 Small + smooth + bilateral smoothing,disparity,global_lsq + smooth,dev_blocks_cv,dev,A,0.2798497141833346,6.086406873843611,4.715092248231077,0.5070152950099412,61
+DAv2 Small + smooth + geometry-consistency (full),disparity,global_lsq + smooth,dev_blocks_cv,dev,A,0.27984960546135484,6.085041899015295,4.715187126365064,0.506985393155199,61
+DAv2 Small + smooth + geometry-consistency without RGB edge protection,disparity,global_lsq + smooth,dev_blocks_cv,dev,A,0.27984960546135484,6.085041899015295,4.715187126365064,0.506985393155199,61
+DAv2 Small + smooth + geometry-consistency without normal-consistency term,disparity,global_lsq + smooth,dev_blocks_cv,dev,A,0.2798495425955333,6.085041492971065,4.715186674382947,0.506985393155199,61
+DAv2 Small + smooth (group base),disparity,global_lsq + smooth,dev_blocks_cv,dev,B,0.27875665965981417,6.9226066584015085,5.102896713071084,0.503234865914868,61
+DAv2 Small + smooth + Gaussian smoothing,disparity,global_lsq + smooth,dev_blocks_cv,dev,B,0.27880463220164475,6.923562326396024,5.103308360889251,0.5031964318165132,61
+DAv2 Small + smooth + bilateral smoothing,disparity,global_lsq + smooth,dev_blocks_cv,dev,B,0.2787466244218662,6.928531689389083,5.104088447434005,0.5031751413329639,61
+DAv2 Small + smooth + geometry-consistency (full),disparity,global_lsq + smooth,dev_blocks_cv,dev,B,0.2787320607014037,6.922478146468919,5.102738912369636,0.5032397019134026,61
+DAv2 Small + smooth + geometry-consistency without RGB edge protection,disparity,global_lsq + smooth,dev_blocks_cv,dev,B,0.2787320607014037,6.922478146468919,5.102738912369636,0.5032397019134026,61
+DAv2 Small + smooth + geometry-consistency without normal-consistency term,disparity,global_lsq + smooth,dev_blocks_cv,dev,B,0.2787319993258595,6.922477797945285,5.102738471077654,0.5032397019134026,61
+DAv2 Small + smooth (group base),disparity,global_lsq + smooth,dev_all,test,A,0.27867577448555914,5.575413504707429,4.389255423784828,0.5366717656580398,103
+DAv2 Small + smooth + Gaussian smoothing,disparity,global_lsq + smooth,dev_all,test,A,0.2787173436731983,5.5762639595579016,4.389835538391613,0.5366333463337964,103
+DAv2 Small + smooth + bilateral smoothing,disparity,global_lsq + smooth,dev_all,test,A,0.27862901712693766,5.5781318695835465,4.389964077574339,0.5365979554959016,103
+DAv2 Small + smooth + geometry-consistency (full),disparity,global_lsq + smooth,dev_all,test,A,0.2786509812733764,5.575072299203595,4.38903952594099,0.5366626283325115,103
+DAv2 Small + smooth + geometry-consistency without RGB edge protection,disparity,global_lsq + smooth,dev_all,test,A,0.2786509812733764,5.575072299203595,4.38903952594099,0.5366626283325115,103
+DAv2 Small + smooth + geometry-consistency without normal-consistency term,disparity,global_lsq + smooth,dev_all,test,A,0.27865081985191414,5.575071770249071,4.389038690842668,0.5366626283325115,103
+DAv2 Small + smooth (group base),disparity,global_lsq + smooth,dev_all,test,B,0.2776895402549581,6.488201028976658,4.791111648019829,0.5292636838346101,103
+DAv2 Small + smooth + Gaussian smoothing,disparity,global_lsq + smooth,dev_all,test,B,0.2777323329153192,6.489635365595289,4.791890030262732,0.5292030879513194,103
+DAv2 Small + smooth + bilateral smoothing,disparity,global_lsq + smooth,dev_all,test,B,0.27765864215007136,6.495912424968808,4.793312069214793,0.5289729481804671,103
+DAv2 Small + smooth + geometry-consistency (full),disparity,global_lsq + smooth,dev_all,test,B,0.27766450625451805,6.487909221456139,4.790896632133848,0.5292546621150134,103
+DAv2 Small + smooth + geometry-consistency without RGB edge protection,disparity,global_lsq + smooth,dev_all,test,B,0.27766450625451805,6.487909221456139,4.790896632133848,0.5292546621150134,103
+DAv2 Small + smooth + geometry-consistency without normal-consistency term,disparity,global_lsq + smooth,dev_all,test,B,0.277664348375473,6.487908776813076,4.790895815322401,0.5292546621150134,103
