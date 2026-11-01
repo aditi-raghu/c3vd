@@ -1,0 +1,38 @@
+{
+  "python": "3.13.14",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "torch": "2.15.0+cpu",
+  "transformers": "5.22.1",
+  "numpy": "2.5.4",
+  "device": "cpu",
+  "seed": 42,
+  "mask_rule": "A",
+  "model": "Intel/dpt-hybrid-midas",
+  "mask": "A",
+  "n_blocks": 4,
+  "gap": 2,
+  "limit": 8,
+  "dev_frames": 8,
+  "test_frames": 8,
+  "timing": {
+    "dev": {
+      "sec_per_frame": 3.5840638571618393,
+      "n_timed": 7,
+      "model_input_hw": [
+        384,
+        384
+      ],
+      "note": "warm-up frame not counted"
+    },
+    "test": {
+      "sec_per_frame": 4.245560462528374,
+      "n_timed": 8,
+      "model_input_hw": [
+        384,
+        384
+      ],
+      "note": "warm-up frame not counted"
+    }
+  },
+  "metrics": "common.compute_metrics per frame; mean over frames; RMSE = sqrt(mean per-frame MSE)"
+}

@@ -1,0 +1,24 @@
+model,output_type,alignment,fit_on,split,mask,absrel,rmse,mae,delta1,n_frames
+DPT-Hybrid Constant median,disparity,none,dev_blocks_cv,dev,A,0.6815594846589876,17.354841028732825,11.918703358211651,0.2380447996273921,8
+DPT-Hybrid DPT + global linear,disparity,global_lsq,dev_blocks_cv,dev,A,0.5863960956648916,10.07449562774778,7.990258674327999,0.36487112792045906,8
+DPT-Hybrid + smooth correction,disparity,global_lsq,dev_blocks_cv,dev,A,0.5430181540918471,9.228360027681857,7.431284989848063,0.3733603765231098,8
+DPT-Hybrid + lumen-aware (darkness only),disparity,global_lsq,dev_blocks_cv,dev,A,0.5374824437832674,9.01572118469189,7.292008953727842,0.38085066277850405,8
+DPT-Hybrid + lumen-aware (depth only),disparity,global_lsq,dev_blocks_cv,dev,A,0.5419082288252517,9.211613896544948,7.427263393914025,0.3723924887773229,8
+DPT-Hybrid + lumen-aware (both cues),disparity,global_lsq,dev_blocks_cv,dev,A,0.5327809350346966,9.06696702491471,7.319639413711753,0.37579295469907875,8
+DPT-Hybrid Isotonic (log),disparity,global_lsq,dev_blocks_cv,dev,A,0.4812907532822044,9.395499371186284,7.4070294370045175,0.3552332667632704,8
+DPT-Hybrid Lumen-aware isotonic (log),disparity,global_lsq,dev_blocks_cv,dev,A,0.4747675246603673,9.221541129680894,7.295446543822528,0.35869183842010777,8
+DPT-Hybrid DPT + global inverse-depth fit,disparity,global_inv_lsq,dev_blocks_cv,dev,A,0.4696862775923095,12.937838683909943,9.452558432188177,0.24690671342649956,8
+DPT-Hybrid Oracle: per-frame median (not fair),disparity,median_oracle,per_frame_gt,dev,A,0.6093719316836309,13.620459860688458,9.962279166670395,0.2605935403261498,8
+DPT-Hybrid Oracle: per-frame LSQ (not fair),disparity,lsq_oracle,per_frame_gt,dev,A,0.5092930028385325,8.652882802999958,7.023807769730858,0.3873389572386259,8
+DPT-Hybrid Constant median,disparity,none,dev_all,test,A,0.5511895932107513,16.602023657390227,10.981889296615968,0.2865612420769247,8
+DPT-Hybrid DPT + global linear,disparity,global_lsq,dev_all,test,A,0.48855513738436795,9.040893393788153,6.495988830567184,0.5337676872787471,8
+DPT-Hybrid + smooth correction,disparity,global_lsq,dev_all,test,A,0.42106304868147504,7.781076327561709,5.439342214652138,0.5860268732294167,8
+DPT-Hybrid + lumen-aware (darkness only),disparity,global_lsq,dev_all,test,A,0.4134481784794428,7.2547668622781405,5.090068225141245,0.5965925203233167,8
+DPT-Hybrid + lumen-aware (depth only),disparity,global_lsq,dev_all,test,A,0.4154452772972299,7.6997323720098665,5.38397886889699,0.5872042739421124,8
+DPT-Hybrid + lumen-aware (both cues),disparity,global_lsq,dev_all,test,A,0.40705081861466963,7.412489572129956,5.117857514630253,0.6062698548124315,8
+DPT-Hybrid Isotonic (log),disparity,global_lsq,dev_all,test,A,0.3673573138853684,7.825764699767344,5.759513850382259,0.4763519478163444,8
+DPT-Hybrid Lumen-aware isotonic (log),disparity,global_lsq,dev_all,test,A,0.3611850317243102,7.542794244923633,5.560605429032492,0.49087726549585875,8
+DPT-Hybrid DPT + global inverse-depth fit,disparity,global_inv_lsq,dev_all,test,A,0.3595626514071581,9.490965739792236,7.272945040271726,0.28703133751995147,8
+DPT-Hybrid Oracle: per-frame median (not fair),disparity,median_oracle,per_frame_gt,test,A,0.48192753819278844,13.855627691484969,9.227440068340218,0.33531673442663246,8
+DPT-Hybrid Oracle: per-frame LSQ (not fair),disparity,lsq_oracle,per_frame_gt,test,A,0.3763658716510722,6.834782487412368,5.0806525572328995,0.5372913973634583,8
+DPT-Hybrid Oracle: linear fitted on test (not fair),disparity,test_lsq_oracle,test,test,A,0.4489091633751241,8.312180139234268,6.107706672386152,0.5031089559263514,8
