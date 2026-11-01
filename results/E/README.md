@@ -1,74 +1,94 @@
-# Stream E: Depth Pro (zero-shot) on C3VD
+# Depth Pro (zero-shot) on C3VD
 
 **Model:** `apple/DepthPro-hf` (Bochkovskii et al., *Depth Pro: Sharp Monocular Metric Depth in Less Than a Second*, 2024), used as released: no training or fine-tuning, no weights changed.
-**Input:** raw C3VD frames; only Depth Pro's own preprocessing (resize to 1536×1536, normalise).
-**Data:** dev = trans_t1_a (61 frames), test = trans_t2_b (103 frames). All scaling constants are fitted on dev only; test was run once.
-**Environment:** `endodepth` (Python 3.11.17, torch 2.13.0, transformers 5.20.2), Apple M4 Pro (MPS), seed 42. Details in `run_info_dev.json` / `run_info_test.json`.
-**Speed:** 3.85 s per frame on test (DA-V2 Small: 0.05 s).
+**Input:** raw C3VD frames; only Depth Pro's own preprocessing (resize to 1536×1536, normalise). Depth is returned at 1080×1350 and scored at that size.
+**Data:** dev = `trans_t1_a` (61 frames), test = `trans_t2_b` (103 frames).
+**Environment:** `c3vd-rerun`, the group's `endodepth` plus scikit-learn and timm 0.6.13 (Python 3.11.17, torch 2.13.0, transformers 5.20.2), Apple M4 Pro (MPS), seed 42. Details are in `run_info_dev.json` and `run_info_test.json`.
+**Speed:** about 4.4 to 4.9 s per frame for the whole prediction. This run measured 4.85 s, and the group report's timed run measured 4.36 s.
 
-Run: `python results/E/run_depthpro.py --split dev` / `--split test`. Notebook view: `DepthPro.ipynb`.
+Run from the repo root: `python results/E/run_depthpro.py --limit 2`, then `--split dev`, then `--split test`. The test run refuses to run a second time once `depthpro_test_done.json` exists. `DepthPro.ipynb` shows the saved tables.
 
-## Scaling protocols
+## Protocol
 
-| Scaling | What it does | Uses GT of the scored frames? |
+This follows the group protocol in `common.py` and the main README.
+
+- **Masks.** Mask A (main table): 0 < raw < 65535 and RGB max > 10. Mask B (second table): raw > 0.
+- **Metrics.** Per frame, then the mean over frames. RMSE = √(mean per-frame MSE).
+- **Fitting.** Development data only. Dev scores come from 4-block CV with a 2-frame gap. Test uses fits on all 61 dev frames and runs once.
+- **Clipping.** Fitted and oracle predictions are clipped to 0.001–100 mm. The raw metric row is not clipped, to show the raw failure.
+- **Oracle rows.** These use the ground truth of the scored frame and are references only, never a selectable method.
+
+## Methods
+
+| Method | What it does | Uses GT of the scored frames? |
 |---|---|---|
-| none (metric) | Depth Pro output in mm, nothing fitted | No |
-| dev_scale | × one factor = median(GT/pred) over all dev pixels (×0.067) | No (dev only) |
-| dev_lsq_depth | a·pred + b, least squares over all dev pixels (same idea as "Linear" in the DA-V2 stream) | No (dev only) |
-| median (oracle) | × per-frame median(GT)/median(pred), as in the ZoeDepth notebook | Yes |
-| lsq_depth (oracle) | per-frame least-squares a·pred + b, as in the ZoeDepth notebook | Yes |
+| Constant median | The median depth of the dev frames, 17.26 mm under mask A | No |
+| Raw metric | Depth Pro output in mm, nothing fitted | No |
+| Dev scale | × one factor = median(GT/pred) over dev pixels (×0.066 under mask A) | No |
+| Linear | a·pred + b, least squares over dev pixels | No |
+| Smooth | Linear, plus the mean signed error per 20 mm bin of linear depth (bins with at least 2000 pixels) | No |
+| Oracle median | × per-frame median(GT)/median(pred) | Yes |
+| Oracle LSQ | per-frame least-squares a·pred + b | Yes |
 
-## Test results (trans_t2_b), mask = `gt>0` (drops only pixels with no GT; same as the DA-V2 stream's final table)
+## Test results, mask A (main table)
 
-| Model | Scaling | MAE (mm) ↓ | AbsRel ↓ | RMSE (mm) ↓ | δ<1.25 ↑ |
-|---|---|---|---|---|---|
-| Constant median (17.58 mm, from dev) | – | 12.98 | **0.566** | 21.21 | 0.270 |
-| Depth Pro | none (raw metric) | 315.12 | 19.305 | 319.15 | 0.000 |
-| Depth Pro | dev_scale | **10.87** | 0.601 | 16.08 | **0.298** |
-| Depth Pro | dev_lsq_depth | 13.06 | 0.933 | **14.79** | 0.249 |
-| Depth Pro | median (oracle) | 10.53 | 0.480 | 17.10 | 0.341 |
-| Depth Pro | lsq_depth (oracle) | 3.96 | 0.254 | 5.19 | 0.630 |
+`trans_t2_b`, 103 frames.
 
-## Test results, mask = `valid` (also drops 100 mm clamped and near-black pixels; same as ZoeDepth / `env_check.py`)
+| Method | AbsRel ↓ | RMSE (mm) ↓ | MAE (mm) ↓ | δ<1.25 ↑ |
+|---|---:|---:|---:|---:|
+| Constant median | 0.550 | 17.71 | 11.45 | 0.275 |
+| Raw metric | 19.624 | 318.86 | 311.65 | 0.000 |
+| Dev scale | 0.586 | 13.53 | 9.69 | 0.308 |
+| Linear | 0.875 | 14.33 | 11.73 | 0.269 |
+| Smooth | 0.826 | 14.08 | 11.28 | 0.286 |
+| Oracle median | 0.468 | 14.24 | 9.32 | 0.346 |
+| Oracle LSQ | 0.251 | 4.93 | 3.75 | 0.637 |
 
-| Model | Scaling | MAE (mm) ↓ | AbsRel ↓ | RMSE (mm) ↓ | δ<1.25 ↑ |
-|---|---|---|---|---|---|
-| Constant median (17.26 mm, from dev) | – | 11.45 | **0.550** | 17.69 | 0.275 |
-| Depth Pro | none (raw metric) | 311.65 | 19.624 | 314.86 | 0.000 |
-| Depth Pro | dev_scale | **9.69** | 0.586 | 13.51 | **0.308** |
-| Depth Pro | dev_lsq_depth | 11.73 | 0.875 | **13.34** | 0.269 |
-| Depth Pro | median (oracle) | 9.32 | 0.468 | 14.22 | 0.346 |
-| Depth Pro | lsq_depth (oracle) | 3.75 | 0.251 | 4.91 | 0.637 |
+## Test results, mask B (second table)
 
-## Dev results (trans_t1_a), mask = `valid`
+| Method | AbsRel ↓ | RMSE (mm) ↓ | MAE (mm) ↓ | δ<1.25 ↑ |
+|---|---:|---:|---:|---:|
+| Constant median | 0.565 | 21.21 | 12.98 | 0.270 |
+| Raw metric | 19.305 | 323.20 | 315.12 | 0.000 |
+| Dev scale | 0.601 | 16.11 | 10.87 | 0.298 |
+| Linear | 0.933 | 15.95 | 13.04 | 0.249 |
+| Smooth | 0.868 | 15.81 | 12.47 | 0.270 |
+| Oracle median | 0.480 | 17.10 | 10.53 | 0.341 |
+| Oracle LSQ | 0.253 | 5.21 | 3.95 | 0.630 |
 
-| Model | Scaling | MAE (mm) ↓ | AbsRel ↓ | RMSE (mm) ↓ | δ<1.25 ↑ |
-|---|---|---|---|---|---|
-| Constant median | – | 12.04 | 0.603 | 18.31 | 0.256 |
-| Depth Pro | none (raw metric) | 263.09 | 17.108 | 266.75 | 0.000 |
-| Depth Pro | dev_scale (in-sample) | 10.01 | 0.532 | 14.55 | 0.274 |
-| Depth Pro | dev_lsq_depth (in-sample) | 8.85 | 0.573 | 11.20 | 0.314 |
-| Depth Pro | median (oracle) | 9.63 | 0.511 | 14.39 | 0.315 |
-| Depth Pro | lsq_depth (oracle) | 4.16 | 0.301 | 5.17 | 0.575 |
+## Dev results, 4-block CV, mask A
 
-(`gt>0` dev numbers are in `depthpro_dev_summary.csv`.)
+| Method | AbsRel ↓ | RMSE (mm) ↓ | MAE (mm) ↓ | δ<1.25 ↑ |
+|---|---:|---:|---:|---:|
+| Constant median | 0.605 | 18.31 | 12.06 | 0.252 |
+| Raw metric | 17.108 | 270.87 | 263.09 | 0.000 |
+| Dev scale | 0.553 | 14.73 | 10.24 | 0.263 |
+| Linear | 0.671 | 13.57 | 10.66 | 0.246 |
+| Smooth | 0.667 | 13.67 | 10.64 | 0.253 |
+| Oracle median | 0.511 | 14.41 | 9.63 | 0.315 |
+| Oracle LSQ | 0.301 | 5.21 | 4.16 | 0.574 |
 
-## Comparison with other streams on test (mask `gt>0`, scaling fitted on dev only)
-
-| Model (stream) | MAE (mm) ↓ | AbsRel ↓ | RMSE (mm) ↓ | δ<1.25 ↑ | s/frame |
-|---|---|---|---|---|---|
-| Constant median | 12.98 | 0.566 | 21.21 | 0.270 | – |
-| Depth Pro + dev_scale (E) | 10.87 | 0.601 | 16.08 | 0.298 | 3.85 |
-| Depth Pro + dev_lsq_depth (E) | 13.06 | 0.933 | 14.79 | 0.249 | 3.85 |
-| DA-V2 Small + Linear (DA-V2 stream) | 6.40 | 0.370 | 8.71 | 0.416 | 0.05 |
-| DA-V2 Large + Linear (DA-V2 stream) | 5.02 | 0.284 | 7.21 | 0.553 | – |
-| DA-V2 Small + Smooth Correction (DA-V2 stream) | 4.65 | 0.283 | 5.87 | 0.544 | 0.05 |
-
-DA-V2 rows are copied from `results/Depth Anything V2/final_test_comparison.csv` and `all_models_comparison.csv`. The constant-median row matches theirs exactly (same data, same mask).
+Mask B dev results are in `depthpro_dev_summary.csv`.
 
 ## Findings
 
-1. **Raw metric output fails completely.** Depth Pro predicts the colon about 18× too far on test (≈ 315 mm vs ≈ 17 mm), and no pixel falls within 25% of GT. It estimates a ~51° field of view, far narrower than the colonoscope's, and interprets the lumen as a room-scale scene.
-2. **With dev-fitted scaling it does not beat the constant baseline on AbsRel.** One dev scale improves MAE, RMSE and δ slightly but gives a worse AbsRel (0.601 vs 0.566). A dev-fitted scale + shift transfers worse still (AbsRel 0.933). The shift learnt on texture t1 does not suit texture t2.
-3. **The shape is good; scale and range are the problem.** With a per-frame scale + shift (oracle), Depth Pro reaches AbsRel 0.254 and δ 0.630, so its relative structure of the tunnel is largely correct. Its predicted near-to-far range is compressed (≈1.7× vs ≈8.8× in GT), so one global factor cannot fix it, and the right correction changes from frame to frame.
-4. **Too slow for the task.** At 3.85 s/frame it is about 75× slower than DA-V2 Small and below real-time rates needed for endoscopic guidance. Together with point 2, this supports the group's choice of Depth Anything V2.
+1. **Raw metric output fails completely.** On test under mask A, Depth Pro predicts the colon about 15 times too far (mean 335 mm against 23 mm), and no pixel falls within 25% of the ground truth. Its own per-frame estimate of the field of view averages about 51°, far narrower than a wide-angle colonoscope.
+2. **Dev-fitted scaling does not beat the constant baseline on AbsRel.** Dev scale improves RMSE, MAE and δ<1.25 but has a worse AbsRel (0.586 against 0.550). Linear and Smooth transfer worse still (0.875 and 0.826), because a shift learnt on one texture does not suit the other.
+3. **The shape is good; scale and range are the problem.** With a per-frame scale and shift (oracle), Depth Pro reaches AbsRel 0.251 and δ<1.25 of 0.637, so its relative structure of the tunnel is largely correct. Its predicted near-to-far range is compressed (95th to 5th percentile ratio of about 1.7, against about 8.8 in the ground truth).
+4. **It is too slow for the task.** At about 4.4 to 4.9 s per frame it is roughly 70 times slower than Depth Anything V2 Small (64 ms). Together with point 2, this supports the group's choice of Depth Anything V2.
+
+The group report compares every model under the same rules.
+
+## Files
+
+| File | Contents |
+|---|---|
+| `run_depthpro.py` | Inference, fits, scoring and the test-once check |
+| `depthpro_{dev,test}_summary.csv` | Results per split, mask and method |
+| `depthpro_{dev,test}_per_frame.csv` | Per-frame scores |
+| `DepthPro_summary.csv` | The same results in the group's summary format |
+| `depthpro_test_done.json` | Record of the single test run |
+| `run_info_{dev,test}.json` | Versions, seed, fitted constants, timing and field of view |
+| `DepthPro.ipynb` | Notebook view of the saved tables |
+| `cache/` | Saved predictions (about 0.9 GB, ignored by git) |
+| `refinement/` | Uncertainty-guided refinement, a separate comparison stream |

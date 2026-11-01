@@ -1,15 +1,91 @@
-comparison,metric,without (base),with improvement,difference,change_%,better?
-Uncertainty-guided refinement vs Small + Smooth,MAE (mm),4.653,4.6199,-0.0331,-0.7,yes
-Uncertainty-guided refinement vs Small + Smooth,AbsRel,0.2825,0.2793,-0.0032,-1.1,yes
-Uncertainty-guided refinement vs Small + Smooth,RMSE (mm),5.8733,5.8359,-0.0374,-0.6,yes
-Uncertainty-guided refinement vs Small + Smooth,δ<1.25,0.5444,0.546,0.0016,0.3,yes
-Uncertainty-guided refinement vs Small + Smooth,AbsRel boundary,0.4388,0.4338,-0.005,-1.1,yes
-Uncertainty-guided refinement vs Small + Smooth,AbsRel flat,0.2624,0.2594,-0.003,-1.1,yes
-Uncertainty-guided refinement vs Small + Smooth,frames with lower AbsRel,,101/103,,,
-Ensemble + uncertainty-guided refinement vs Small + Smooth,MAE (mm),4.653,4.2823,-0.3707,-8.0,yes
-Ensemble + uncertainty-guided refinement vs Small + Smooth,AbsRel,0.2825,0.258,-0.0245,-8.7,yes
-Ensemble + uncertainty-guided refinement vs Small + Smooth,RMSE (mm),5.8733,5.5262,-0.347,-5.9,yes
-Ensemble + uncertainty-guided refinement vs Small + Smooth,δ<1.25,0.5444,0.59,0.0456,8.4,yes
-Ensemble + uncertainty-guided refinement vs Small + Smooth,AbsRel boundary,0.4388,0.4161,-0.0227,-5.2,yes
-Ensemble + uncertainty-guided refinement vs Small + Smooth,AbsRel flat,0.2624,0.2377,-0.0247,-9.4,yes
-Ensemble + uncertainty-guided refinement vs Small + Smooth,frames with lower AbsRel,,100/103,,,
+split,mask,variant,metric,without (base),with improvement,difference,change_%,better?
+test,A,Uniform smoothing,MAE (mm),4.4099,4.4163,0.0064,0.1,no
+test,A,Uniform smoothing,AbsRel,0.2805,0.2793,-0.0012,-0.4,yes
+test,A,Uniform smoothing,RMSE (mm),5.5958,5.6184,0.0226,0.4,no
+test,A,Uniform smoothing,δ<1.25,0.535,0.5337,-0.0013,-0.2,no
+test,A,Uniform smoothing,AbsRel boundary,0.4408,0.439,-0.0018,-0.4,yes
+test,A,Uniform smoothing,AbsRel flat,0.2601,0.2592,-0.0009,-0.3,yes
+test,A,Uniform smoothing,"AbsRel change, 95% CI low",,,-0.0024,,
+test,A,Uniform smoothing,"AbsRel change, 95% CI high",,,-0.0003,,
+test,A,Uniform smoothing,frames with lower AbsRel,,68/103,,,
+test,A,Edge-aware (guided filter),MAE (mm),4.4099,4.4105,0.0006,0.0,no
+test,A,Edge-aware (guided filter),AbsRel,0.2805,0.2805,-0.0,-0.0,yes
+test,A,Edge-aware (guided filter),RMSE (mm),5.5958,5.5968,0.001,0.0,no
+test,A,Edge-aware (guided filter),δ<1.25,0.535,0.5349,-0.0001,-0.0,no
+test,A,Edge-aware (guided filter),AbsRel boundary,0.4408,0.4409,0.0001,0.0,no
+test,A,Edge-aware (guided filter),AbsRel flat,0.2601,0.2601,-0.0,-0.0,yes
+test,A,Edge-aware (guided filter),"AbsRel change, 95% CI low",,,-0.0001,,
+test,A,Edge-aware (guided filter),"AbsRel change, 95% CI high",,,0.0,,
+test,A,Edge-aware (guided filter),frames with lower AbsRel,,53/103,,,
+test,A,Uncertainty-guided,MAE (mm),4.4099,4.3822,-0.0276,-0.6,yes
+test,A,Uncertainty-guided,AbsRel,0.2805,0.2775,-0.003,-1.1,yes
+test,A,Uncertainty-guided,RMSE (mm),5.5958,5.5643,-0.0315,-0.6,yes
+test,A,Uncertainty-guided,δ<1.25,0.535,0.536,0.0011,0.2,yes
+test,A,Uncertainty-guided,AbsRel boundary,0.4408,0.4341,-0.0067,-1.5,yes
+test,A,Uncertainty-guided,AbsRel flat,0.2601,0.2576,-0.0025,-1.0,yes
+test,A,Uncertainty-guided,"AbsRel change, 95% CI low",,,-0.0035,,
+test,A,Uncertainty-guided,"AbsRel change, 95% CI high",,,-0.0025,,
+test,A,Uncertainty-guided,frames with lower AbsRel,,99/103,,,
+test,A,Ensemble mean (control),MAE (mm),4.4099,4.0615,-0.3484,-7.9,yes
+test,A,Ensemble mean (control),AbsRel,0.2805,0.2586,-0.022,-7.8,yes
+test,A,Ensemble mean (control),RMSE (mm),5.5958,5.2479,-0.3478,-6.2,yes
+test,A,Ensemble mean (control),δ<1.25,0.535,0.5804,0.0454,8.5,yes
+test,A,Ensemble mean (control),AbsRel boundary,0.4408,0.4209,-0.0199,-4.5,yes
+test,A,Ensemble mean (control),AbsRel flat,0.2601,0.2379,-0.0222,-8.5,yes
+test,A,Ensemble mean (control),"AbsRel change, 95% CI low",,,-0.0281,,
+test,A,Ensemble mean (control),"AbsRel change, 95% CI high",,,-0.0169,,
+test,A,Ensemble mean (control),frames with lower AbsRel,,94/103,,,
+test,A,Ensemble + uncertainty-guided,MAE (mm),4.4099,4.0366,-0.3733,-8.5,yes
+test,A,Ensemble + uncertainty-guided,AbsRel,0.2805,0.2559,-0.0247,-8.8,yes
+test,A,Ensemble + uncertainty-guided,RMSE (mm),5.5958,5.2219,-0.3739,-6.7,yes
+test,A,Ensemble + uncertainty-guided,δ<1.25,0.535,0.582,0.0471,8.8,yes
+test,A,Ensemble + uncertainty-guided,AbsRel boundary,0.4408,0.4152,-0.0256,-5.8,yes
+test,A,Ensemble + uncertainty-guided,AbsRel flat,0.2601,0.2356,-0.0245,-9.4,yes
+test,A,Ensemble + uncertainty-guided,"AbsRel change, 95% CI low",,,-0.0308,,
+test,A,Ensemble + uncertainty-guided,"AbsRel change, 95% CI high",,,-0.0194,,
+test,A,Ensemble + uncertainty-guided,frames with lower AbsRel,,97/103,,,
+test,B,Uniform smoothing,MAE (mm),4.653,4.6722,0.0192,0.4,no
+test,B,Uniform smoothing,AbsRel,0.2825,0.2814,-0.0012,-0.4,yes
+test,B,Uniform smoothing,RMSE (mm),5.8733,5.929,0.0557,0.9,no
+test,B,Uniform smoothing,δ<1.25,0.5444,0.5425,-0.0019,-0.4,no
+test,B,Uniform smoothing,AbsRel boundary,0.4388,0.4369,-0.002,-0.4,yes
+test,B,Uniform smoothing,AbsRel flat,0.2624,0.2617,-0.0008,-0.3,yes
+test,B,Uniform smoothing,"AbsRel change, 95% CI low",,,-0.0023,,
+test,B,Uniform smoothing,"AbsRel change, 95% CI high",,,-0.0003,,
+test,B,Uniform smoothing,frames with lower AbsRel,,71/103,,,
+test,B,Edge-aware (guided filter),MAE (mm),4.653,4.6814,0.0284,0.6,no
+test,B,Edge-aware (guided filter),AbsRel,0.2825,0.2808,-0.0017,-0.6,yes
+test,B,Edge-aware (guided filter),RMSE (mm),5.8733,5.979,0.1057,1.8,no
+test,B,Edge-aware (guided filter),δ<1.25,0.5444,0.5407,-0.0036,-0.7,no
+test,B,Edge-aware (guided filter),AbsRel boundary,0.4388,0.4372,-0.0017,-0.4,yes
+test,B,Edge-aware (guided filter),AbsRel flat,0.2624,0.2607,-0.0017,-0.7,yes
+test,B,Edge-aware (guided filter),"AbsRel change, 95% CI low",,,-0.0027,,
+test,B,Edge-aware (guided filter),"AbsRel change, 95% CI high",,,-0.0008,,
+test,B,Edge-aware (guided filter),frames with lower AbsRel,,93/103,,,
+test,B,Uncertainty-guided,MAE (mm),4.653,4.6199,-0.0331,-0.7,yes
+test,B,Uncertainty-guided,AbsRel,0.2825,0.2793,-0.0032,-1.1,yes
+test,B,Uncertainty-guided,RMSE (mm),5.8733,5.8359,-0.0374,-0.6,yes
+test,B,Uncertainty-guided,δ<1.25,0.5444,0.546,0.0016,0.3,yes
+test,B,Uncertainty-guided,AbsRel boundary,0.4388,0.4338,-0.005,-1.1,yes
+test,B,Uncertainty-guided,AbsRel flat,0.2624,0.2594,-0.003,-1.1,yes
+test,B,Uncertainty-guided,"AbsRel change, 95% CI low",,,-0.0038,,
+test,B,Uncertainty-guided,"AbsRel change, 95% CI high",,,-0.0026,,
+test,B,Uncertainty-guided,frames with lower AbsRel,,101/103,,,
+test,B,Ensemble mean (control),MAE (mm),4.653,4.3105,-0.3425,-7.4,yes
+test,B,Ensemble mean (control),AbsRel,0.2825,0.2608,-0.0218,-7.7,yes
+test,B,Ensemble mean (control),RMSE (mm),5.8733,5.5553,-0.318,-5.4,yes
+test,B,Ensemble mean (control),δ<1.25,0.5444,0.5877,0.0433,8.0,yes
+test,B,Ensemble mean (control),AbsRel boundary,0.4388,0.4198,-0.019,-4.3,yes
+test,B,Ensemble mean (control),AbsRel flat,0.2624,0.2404,-0.022,-8.4,yes
+test,B,Ensemble mean (control),"AbsRel change, 95% CI low",,,-0.0277,,
+test,B,Ensemble mean (control),"AbsRel change, 95% CI high",,,-0.0172,,
+test,B,Ensemble mean (control),frames with lower AbsRel,,96/103,,,
+test,B,Ensemble + uncertainty-guided,MAE (mm),4.653,4.2823,-0.3707,-8.0,yes
+test,B,Ensemble + uncertainty-guided,AbsRel,0.2825,0.258,-0.0245,-8.7,yes
+test,B,Ensemble + uncertainty-guided,RMSE (mm),5.8733,5.5262,-0.347,-5.9,yes
+test,B,Ensemble + uncertainty-guided,δ<1.25,0.5444,0.59,0.0456,8.4,yes
+test,B,Ensemble + uncertainty-guided,AbsRel boundary,0.4388,0.4161,-0.0227,-5.2,yes
+test,B,Ensemble + uncertainty-guided,AbsRel flat,0.2624,0.2377,-0.0247,-9.4,yes
+test,B,Ensemble + uncertainty-guided,"AbsRel change, 95% CI low",,,-0.0305,,
+test,B,Ensemble + uncertainty-guided,"AbsRel change, 95% CI high",,,-0.0198,,
+test,B,Ensemble + uncertainty-guided,frames with lower AbsRel,,100/103,,,

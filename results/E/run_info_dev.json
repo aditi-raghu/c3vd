@@ -6,26 +6,63 @@
   "numpy": "2.4.6",
   "device": "mps",
   "seed": 42,
+  "mask_rule": "A",
   "model": "apple/DepthPro-hf",
   "split": "dev",
-  "frames": 61,
+  "dev_frames": 61,
+  "test_frames": 0,
+  "masks": [
+    "A",
+    "B"
+  ],
   "flip_test": false,
   "fine_tuned": false,
   "input": "raw frames, Depth Pro processor only (1536x1536)",
-  "dev_constants": {
-    "gt>0": {
-      "median_mm": 17.582971572875977,
-      "dev_scale": 0.06734878569841385,
-      "dev_lsq_a": 0.19196945428848267,
-      "dev_lsq_b_mm": -31.255859375
-    },
-    "valid": {
+  "constants_from_all_dev_frames": {
+    "A": {
       "median_mm": 17.259479522705078,
       "dev_scale": 0.06616178900003433,
-      "dev_lsq_a": 0.17045512795448303,
-      "dev_lsq_b_mm": -25.78875732421875
+      "linear_a": 0.17045512699885493,
+      "linear_b_mm": -25.788756705194263,
+      "bin_centers_mm": [
+        10.0,
+        30.0,
+        50.0,
+        70.0,
+        90.0
+      ],
+      "bin_corrections_mm": [
+        1.4934131646502178,
+        -2.9549042931325484,
+        4.5229165794197606,
+        5.17079461088468,
+        4.568699958143802
+      ]
+    },
+    "B": {
+      "median_mm": 17.582971572875977,
+      "dev_scale": 0.06734878569841385,
+      "linear_a": 0.1919694531374768,
+      "linear_b_mm": -31.25585882443607,
+      "bin_centers_mm": [
+        10.0,
+        30.0,
+        50.0,
+        70.0,
+        90.0
+      ],
+      "bin_corrections_mm": [
+        2.067220668315905,
+        -4.362371451265385,
+        5.597947330384069,
+        3.4189626898331795,
+        5.742101858507069
+      ]
     }
   },
+  "n_blocks": 4,
+  "gap": 2,
   "mean_pred_fov_deg": 51.330430327868854,
-  "sec_per_frame": 3.7967431852915166
+  "sec_per_frame": 4.548519774333181,
+  "timing": "whole prediction per frame, first frame not counted"
 }

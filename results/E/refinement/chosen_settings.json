@@ -1,27 +1,88 @@
 {
-  "chosen_on": "dev 0045-0060, calibration fitted on 0000-0044, criterion AbsRel",
-  "seed": 42,
-  "perturbations": [
-    "id",
-    "flip",
-    "bright+",
-    "bright-",
-    "s476",
-    "s560"
-  ],
-  "sigma": 16,
-  "ea_r": 8,
-  "ea_eps": 0.001,
-  "ug_r": 32,
-  "ug_eps": 0.01,
-  "pct": [
-    50,
-    90
-  ],
-  "test_thresholds": {
-    "lo": 0.06989971548318863,
-    "hi": 0.28360795974731445,
-    "p_lo": 50,
-    "p_hi": 90
+  "A": {
+    "chosen_on": "dev 4-block CV, 2-frame gap, criterion AbsRel",
+    "seed": 42,
+    "perturbations": [
+      "id",
+      "flip",
+      "bright+",
+      "bright-",
+      "s476",
+      "s560"
+    ],
+    "sigma": 16,
+    "ea_r": 4,
+    "ea_eps": 0.001,
+    "ug_r": 32,
+    "ug_eps": 0.01,
+    "pct": [
+      70,
+      95
+    ],
+    "test_thresholds": {
+      "lo": 0.11107353866100311,
+      "hi": 0.3474356234073639,
+      "p_lo": 70,
+      "p_hi": 95
+    },
+    "base_params_all_dev": {
+      "scale": 13.321026402179045,
+      "offset": 64.22639453594257,
+      "centers": [
+        10.0,
+        30.0,
+        50.0,
+        70.0
+      ],
+      "corrections": [
+        1.1854966654446266,
+        -4.087495109635871,
+        1.6420941408037388,
+        23.40271767465892
+      ]
+    }
+  },
+  "B": {
+    "chosen_on": "dev 4-block CV, 2-frame gap, criterion AbsRel",
+    "seed": 42,
+    "perturbations": [
+      "id",
+      "flip",
+      "bright+",
+      "bright-",
+      "s476",
+      "s560"
+    ],
+    "sigma": 16,
+    "ea_r": 32,
+    "ea_eps": 0.01,
+    "ug_r": 32,
+    "ug_eps": 0.01,
+    "pct": [
+      50,
+      90
+    ],
+    "test_thresholds": {
+      "lo": 0.06989975273609161,
+      "hi": 0.28360846638679504,
+      "p_lo": 50,
+      "p_hi": 90
+    },
+    "base_params_all_dev": {
+      "scale": 14.802705994499844,
+      "offset": 69.53106608577623,
+      "centers": [
+        10.0,
+        30.0,
+        50.0,
+        70.0
+      ],
+      "corrections": [
+        1.85222461641259,
+        -5.1703157991423705,
+        -5.0129408715375945,
+        20.718139339413383
+      ]
+    }
   }
 }

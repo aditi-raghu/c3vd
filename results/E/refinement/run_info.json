@@ -1,0 +1,18 @@
+{
+  "python": "3.11.17",
+  "platform": "macOS-15.1-arm64-arm-64bit",
+  "torch": "2.13.0",
+  "transformers": "5.20.2",
+  "numpy": "2.4.6",
+  "device": "mps",
+  "seed": 42,
+  "mask_rule": "A",
+  "stream": "uncertainty-guided refinement",
+  "base": "DAv2 Small + Smooth, input 518, fitted under each mask",
+  "masks": [
+    "A",
+    "B"
+  ],
+  "n_blocks": 4,
+  "gap": 2
+}
