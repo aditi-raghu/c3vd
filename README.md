@@ -53,8 +53,8 @@ DAv2 Small 518 + smooth correction. Frozen parameters: `results/DAv2_MaskA_Verif
 Note: the N4 and N5 runs recompute the base in their own environments (test AbsRel 0.285 and 0.279 against 0.2805). Each novelty is compared with the base row of its own run.
 
 ## Report figures
-`python report/make_figs2.py` reads only the saved result files and writes Figures 1, 3-9 and 13 of the report and the
-bootstrap / paired-test tables to `report/figures/`. Figures 2, 10, 11, 12, 14 and 15 come from the stream notebooks.
+`python report/make_figs2.py` reads only the saved result files and writes Figures 1, 3-8, 10 and 14 of the report and the
+bootstrap / paired-test tables to `report/figures/`. Figures 2, 9, 11, 12, 13 and 15 come from the stream notebooks.
 
 ## Path notes
 - `results/E/refinement/smooth_model.py` (DAv2 Small + smooth correction) is shared by N2 and N3. It reads
