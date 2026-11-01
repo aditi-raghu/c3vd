@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-01T15:19:22",
+  "n_frames": 103,
+  "absrel_mask_A": {
+    "Small + Smooth (base)": 0.28052521968038213,
+    "Uniform smoothing": 0.27930814085431854,
+    "Edge-aware (guided filter)": 0.28052308022544864,
+    "Uncertainty-guided": 0.27754032937225426,
+    "Ensemble mean (control)": 0.25856337283265635,
+    "Ensemble + uncertainty-guided": 0.255874141068639
+  }
+}

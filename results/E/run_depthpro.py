@@ -1,59 +1,53 @@
-"""Stream E: Depth Pro (Apple, 2024) zero-shot on raw C3VD frames, compared with the constant-median baseline.
+"""Depth Pro (Apple, 2024) zero-shot on raw C3VD frames, compared with the constant-median baseline.
 
 Raw input: frames go into Depth Pro exactly as stored (no undistortion, no highlight removal, no cropping);
 only Depth Pro's own preprocessing (resize to 1536x1536, normalise) is applied. No training or fine-tuning.
 
+Group protocol (common.py and README.md): mask A for the main table, mask B for the second table; metrics per frame,
+mean over frames, RMSE = sqrt(mean per-frame MSE); fits on development data only (4-block CV, 2-frame gap);
+test uses fits on all 61 dev frames and runs once.
+
 Usage (from the repo root, env `endodepth`):
-    python results/E/run_depthpro.py --limit 2        # quick check on 2 dev frames
-    python results/E/run_depthpro.py                  # full dev run
-    python results/E/run_depthpro.py --split test     # final test run (settings frozen on dev first)
+    python results/E/run_depthpro.py --limit 2        # quick check on 2 dev frames, in-sample, saves no tables
+    python results/E/run_depthpro.py --split dev      # 4-block CV on dev
+    python results/E/run_depthpro.py --split test     # one test run; refuses to run a second time
 
-Scaling (same names as the ZoeDepth notebook, plus one deployable protocol):
-    none (metric x1000)   Depth Pro output in mm, nothing fitted                     no GT used
-    dev_scale             x one scale = median(GT/pred) over dev pixels              dev GT only (in-sample on dev)
-    dev_lsq_depth         a*pred + b, least squares over all dev pixels             dev GT only (= 'Linear' in the DA-V2 stream)
-    median                x per-frame median(GT)/median(pred)                        uses this frame's GT (oracle)
-    lsq_depth             per-frame least-squares a*pred + b in depth                uses this frame's GT (oracle)
-Baselines: constant dev median (dev GT only) and constant per-frame median (oracle).
-
-Masks (both reported, the group uses both):
-    gt>0       drop only pixels with no GT (raw depth = 0)                 = Depth Anything V2 stream final table
-    valid      also drop 100 mm clamped pixels and near-black pixels       = ZoeDepth notebook / env_check.py
+Methods (the same calibrations as every other model in the group's comparison):
+    Constant median   median depth of the fit frames                         dev GT only
+    Raw metric        Depth Pro output in mm, nothing fitted, no clip        no GT used
+    Dev scale         x one scale = median(GT/pred) over the fit pixels      dev GT only
+    Linear            a*pred + b, least squares over the fit pixels          dev GT only
+    Smooth            Linear + correction from the mean error per 20 mm bin  dev GT only
+    Oracle median     x per-frame median(GT)/median(pred)                    uses this frame's GT (oracle)
+    Oracle LSQ        per-frame least-squares a*pred + b                     uses this frame's GT (oracle)
 """
 import argparse
 import json
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from common import CFG, DEVICE, SEED, sequence_dir, stream_results_dir, save_run_info, sync  # noqa: E402
+from common import (CFG, DEPTH_MAX_MM, DEVICE, SEED, aggregate, align_lsq, align_median, compute_metrics, dev_folds,  # noqa: E402
+                    list_frames, load_frame, save_run_info, save_summary, stream_results_dir, sync)
 
 import cv2  # noqa: E402
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
-import tifffile  # noqa: E402
 import torch  # noqa: E402
 from tqdm import tqdm  # noqa: E402
 
 MODEL_ID = "apple/DepthPro-hf"
 STREAM = "E"
-
-
-def load_frame(color_path):
-    rgb = cv2.cvtColor(cv2.imread(str(color_path)), cv2.COLOR_BGR2RGB)
-    raw = tifffile.imread(color_path.with_name(color_path.name.replace("_color.png", "_depth.tiff")))
-    gt_mm = raw.astype(np.float32) / 65535.0 * 100.0
-    masks = {"gt>0": raw > 0,
-             "valid": (raw > 0) & (raw < 65535) & (rgb.max(axis=2) > 10)}
-    return rgb, gt_mm, masks
-
-
-def compute_metrics(pred, gt):
-    p = np.clip(pred, 1e-3, None)
-    return {"mae": float(np.mean(np.abs(p - gt))), "absrel": float(np.mean(np.abs(p - gt) / gt)),
-            "rmse": float(np.sqrt(np.mean((p - gt) ** 2))),
-            "delta1": float(np.mean(np.maximum(p / gt, gt / p) < 1.25))}
+MASKS = ("A", "B")
+CLIP = (1e-3, DEPTH_MAX_MM)
+BIN_EDGES = np.array([0, 20, 40, 60, 80, 100], dtype=np.float64)
+BIN_CENTERS = (BIN_EDGES[:-1] + BIN_EDGES[1:]) / 2
+MIN_BIN_PIXELS = 2000
+ALIGNMENT = {"Constant median": ("none", True), "Raw metric": ("none", False), "Dev scale": ("global_scale", True),
+             "Linear": ("global_lsq", True), "Smooth": ("global_lsq + smooth", True),
+             "Oracle median": ("median_oracle", False), "Oracle LSQ": ("lsq_oracle", False)}
 
 
 class DepthPro:
@@ -63,14 +57,15 @@ class DepthPro:
         self.model = DepthProForDepthEstimation.from_pretrained(MODEL_ID).to(DEVICE).eval()
 
     def __call__(self, rgb):
-        """Returns (depth in mm at input resolution, predicted horizontal FoV in degrees, seconds)."""
+        """Returns (depth in mm at input resolution, predicted horizontal FoV in degrees, seconds for the whole prediction)."""
+        sync(DEVICE); t0 = time.perf_counter()
         with torch.no_grad():
             x = self.proc(images=rgb, return_tensors="pt")["pixel_values"].to(DEVICE)
-            sync(DEVICE); t0 = time.perf_counter()
             out = self.model(pixel_values=x)
-            sync(DEVICE); dt = time.perf_counter() - t0
             post = self.proc.post_process_depth_estimation(out, target_sizes=[rgb.shape[:2]])[0]
-        return post["predicted_depth"].float().cpu().numpy() * 1000.0, float(post["field_of_view"]), dt
+            depth = post["predicted_depth"].float().cpu().numpy() * 1000.0
+        sync(DEVICE); dt = time.perf_counter() - t0
+        return depth, float(post["field_of_view"]), dt
 
 
 def predict_all(split, color_paths, out_dir, state):
@@ -83,88 +78,139 @@ def predict_all(split, color_paths, out_dir, state):
         if not f.exists():
             if "model" not in state:
                 state["model"] = DepthPro()
-            d, fov, dt = state["model"](cv2.cvtColor(cv2.imread(str(cp)), cv2.COLOR_BGR2RGB))
+            rgb = cv2.cvtColor(cv2.imread(str(cp)), cv2.COLOR_BGR2RGB)
+            d, fov, dt = state["model"](rgb)
             np.save(f, d.astype(np.float32)); np.save(ff, np.float32(fov)); state.setdefault("times", []).append(dt)
         preds[cp.stem], fovs[cp.stem] = np.load(f), float(np.load(ff))
     return preds, fovs
 
 
+def fit_on(preds, gts, valids):
+    """All fitted constants, from the given development frames and mask only."""
+    x = np.concatenate([p[v] for p, v in zip(preds, valids)]).astype(np.float64)
+    y32 = np.concatenate([g[v] for g, v in zip(gts, valids)])
+    y = y32.astype(np.float64)
+    a = ((x - x.mean()) * (y - y.mean())).sum() / ((x - x.mean()) ** 2).sum()
+    b = y.mean() - a * x.mean()
+    lin = np.clip(a * x + b, *CLIP)
+    k = np.clip(np.digitize(lin, BIN_EDGES) - 1, 0, len(BIN_CENTERS) - 1)
+    s, n = np.bincount(k, y - lin, len(BIN_CENTERS)), np.bincount(k, minlength=len(BIN_CENTERS))
+    ok = n >= MIN_BIN_PIXELS
+    scale = np.median(np.concatenate([g[v] / np.maximum(p[v], 1e-6) for p, g, v in zip(preds, gts, valids)]))
+    return {"median_mm": float(np.median(y32)), "dev_scale": float(scale), "linear_a": float(a), "linear_b_mm": float(b),
+            "bin_centers_mm": BIN_CENTERS[ok].tolist(), "bin_corrections_mm": (s[ok] / n[ok]).tolist()}
+
+
+def method_preds(p, g, v, c):
+    """Depth map of every method for one frame. Fitted and oracle rows are clipped; the raw row shows the raw failure."""
+    lin = np.clip(c["linear_a"] * p + c["linear_b_mm"], *CLIP)
+    return {"Constant median": np.full_like(g, c["median_mm"]),
+            "Raw metric": p,
+            "Dev scale": np.clip(p * c["dev_scale"], *CLIP),
+            "Linear": lin,
+            "Smooth": np.clip(lin + np.interp(lin, c["bin_centers_mm"], c["bin_corrections_mm"]), *CLIP),
+            "Oracle median": np.clip(align_median(p, g, v), *CLIP),
+            "Oracle LSQ": np.clip(align_lsq(p, g, v), *CLIP)}
+
+
+def score_frame(split, mask, fold, stem, p, g, v, c):
+    return [{"split": split, "mask": mask, "fold": fold, "frame": stem, "method": name, "oracle": name.startswith("Oracle"),
+             **compute_metrics(x, g, v)} for name, x in method_preds(p, g, v, c).items()]
+
+
+def summarise(per_frame):
+    rows = [{"split": sp, "mask": mk, "method": me, "oracle": me.startswith("Oracle"), **aggregate(d)}
+            for (sp, mk, me), d in per_frame.groupby(["split", "mask", "method"], sort=False)]
+    return pd.DataFrame(rows)
+
+
+def group_table(out_dir):
+    """The group's summary format, once both splits exist."""
+    tables = [out_dir / f"depthpro_{s}_summary.csv" for s in ("dev", "test")]
+    if not all(t.exists() for t in tables):
+        return
+    rows = []
+    for t in tables:
+        for r in pd.read_csv(t).itertuples():
+            align, fitted = ALIGNMENT[r.method]
+            fit = "per_frame_gt" if r.method.startswith("Oracle") else ("dev_blocks_cv" if r.split == "dev" else "dev_all") if fitted else "none"
+            name = "Constant median" if r.method == "Constant median" else f"Depth Pro {r.method}"
+            rows.append({"model": name, "output_type": "metric", "alignment": align, "fit_on": fit, "split": r.split,
+                         "mask": r.mask, "absrel": r.absrel, "rmse": r.rmse, "mae": r.mae, "delta1": r.delta1,
+                         "n_frames": r.n_frames})
+    save_summary(rows, out_dir, "DepthPro")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", default="dev", choices=["dev", "test"])
-    ap.add_argument("--limit", type=int, default=0, help="first N frames only (quick check)")
+    ap.add_argument("--limit", type=int, default=0, help="first N dev frames only: in-sample quick check, saves no tables")
     a = ap.parse_args()
+    if a.limit and a.split == "test":
+        sys.exit("--limit is for dev only: the test set is scored once.")
 
     out_dir = stream_results_dir(CFG, STREAM)
+    done = out_dir / "depthpro_test_done.json"
+    if a.split == "test" and done.exists():
+        sys.exit(f"{done.name} exists: the test set is scored once. Delete it only if the protocol changes.")
     state = {}
-    dev_paths = sorted(sequence_dir(CFG, "dev").glob("*_color.png"))
-    paths = sorted(sequence_dir(CFG, a.split).glob("*_color.png"))
-    if a.limit:
-        dev_paths, paths = dev_paths[:a.limit], paths[:a.limit]
-    print(f"Device {DEVICE} | split {a.split} | {len(paths)} frames | seed {SEED}")
+    dev_paths = list_frames(CFG, "dev")[:a.limit or None]
+    test_paths = list_frames(CFG, "test") if a.split == "test" else []
+    print(f"Device {DEVICE} | split {a.split} | {len(dev_paths)} dev frames | {len(test_paths)} test frames | seed {SEED}")
+    dev_preds, fovs = predict_all("dev", dev_paths, out_dir, state)
+    if a.split == "test":
+        test_preds, fovs = predict_all("test", test_paths, out_dir, state)
 
-    # constants fitted on dev only: baseline median depth and Depth Pro scale correction (per mask)
-    dev_preds, _ = predict_all("dev", dev_paths, out_dir, state)
-    dev_cal = {}
-    for mk in ("gt>0", "valid"):
-        G, R, P = [], [], []
-        for cp in dev_paths:
-            _, gt, masks = load_frame(cp); m = masks[mk]; p = dev_preds[cp.stem][m]
-            G.append(gt[m]); R.append(gt[m] / np.maximum(p, 1e-6)); P.append(p)
-        G, P = np.concatenate(G), np.concatenate(P)
-        (da, db), *_ = np.linalg.lstsq(np.stack([P, np.ones_like(P)], 1), G, rcond=None)
-        dev_cal[mk] = {"median_mm": float(np.median(G)), "dev_scale": float(np.median(np.concatenate(R))),
-                       "dev_lsq_a": float(da), "dev_lsq_b_mm": float(db)}
-        print(f"dev constants [{mk}]: median depth {dev_cal[mk]['median_mm']:.2f} mm, "
-              f"Depth Pro scale x{dev_cal[mk]['dev_scale']:.4f}")
-
-    preds, fovs = (dev_preds, None) if a.split == "dev" else predict_all("test", paths, out_dir, state)
-    if fovs is None:
-        _, fovs = predict_all("dev", paths, out_dir, state)
-
-    rows = []
-    for cp in paths:
-        _, gt, masks = load_frame(cp)
-        for mk, m in masks.items():
-            g, p = gt[m], preds[cp.stem][m]
-            A = np.stack([p, np.ones_like(p)], 1); (la, lb), *_ = np.linalg.lstsq(A, g, rcond=None)
-            cands = {
-                ("Constant median", "dev median"): np.full_like(g, dev_cal[mk]["median_mm"]),
-                ("Constant median", "frame median (oracle)"): np.full_like(g, np.median(g)),
-                ("Depth Pro", "none (metric x1000)"): p,
-                ("Depth Pro", "dev_scale"): p * dev_cal[mk]["dev_scale"],
-                ("Depth Pro", "dev_lsq_depth"): dev_cal[mk]["dev_lsq_a"] * p + dev_cal[mk]["dev_lsq_b_mm"],
-                ("Depth Pro", "median (oracle)"): p * np.median(g) / np.median(p),
-                ("Depth Pro", "lsq_depth (oracle)"): la * p + lb,
-            }
-            for (method, scaling), x in cands.items():
-                rows.append({"split": a.split, "mask": mk, "frame": cp.stem, "method": method, "scaling": scaling,
-                             "pred_fov_deg": fovs[cp.stem], **compute_metrics(x, g)})
+    rows, constants = [], {}
+    for mk in MASKS:
+        dev = [load_frame(cp, mk)[1:] for cp in dev_paths]
+        P = [dev_preds[cp.stem] for cp in dev_paths]
+        G, V = [d[0] for d in dev], [d[1] for d in dev]
+        stems = [cp.stem.split("_")[0] for cp in dev_paths]
+        constants[mk] = fit_on(P, G, V)
+        if a.limit:
+            rows += [r for i in range(len(P)) for r in score_frame("dev", mk, 0, stems[i], P[i], G[i], V[i], constants[mk])]
+        elif a.split == "dev":
+            for k, (fit, held) in enumerate(dev_folds(len(P))):
+                c = fit_on([P[i] for i in fit], [G[i] for i in fit], [V[i] for i in fit])
+                rows += [r for i in held for r in score_frame("dev", mk, k + 1, stems[i], P[i], G[i], V[i], c)]
+        else:
+            for cp in test_paths:
+                _, g, v = load_frame(cp, mk)
+                rows += score_frame("test", mk, 0, cp.stem.split("_")[0], test_preds[cp.stem], g, v, constants[mk])
+        print(f"  mask {mk} done", flush=True)
 
     per_frame = pd.DataFrame(rows)
-    summary = (per_frame.groupby(["mask", "method", "scaling"], sort=False)[["mae", "absrel", "rmse", "delta1"]]
-               .mean().reset_index())
-    tag = f"depthpro_{a.split}" + (f"_limit{a.limit}" if a.limit else "")
+    summary = summarise(per_frame)
+    pd.set_option("display.width", 140)
+    for mk in MASKS:
+        print(f"\n[{a.split}] mask {mk}" + (" (quick check, in-sample)" if a.limit else ""))
+        print(summary[summary["mask"] == mk].drop(columns=["split", "mask", "oracle"]).round(4).to_string(index=False))
+    print(f"\nMean predicted FoV {np.mean(list(fovs.values())):.1f} deg (the model's own per-frame estimate)")
+    if a.limit:
+        return
+
+    tag = f"depthpro_{a.split}"
     per_frame.to_csv(out_dir / f"{tag}_per_frame.csv", index=False)
     summary.to_csv(out_dir / f"{tag}_summary.csv", index=False)
+    group_table(out_dir)
     times = state.get("times", [])
+    info_path = out_dir / f"run_info_{a.split}.json"
+    sec = float(np.mean(times[1:] if len(times) > 1 else times)) if times else None
+    if sec is None and info_path.exists():                       # keep the timing from the run that did inference
+        sec = json.load(open(info_path)).get("sec_per_frame")
     save_run_info(out_dir, DEVICE, SEED, extra={
-        "model": MODEL_ID, "split": a.split, "frames": len(paths), "flip_test": False, "fine_tuned": False,
-        "input": "raw frames, Depth Pro processor only (1536x1536)", "dev_constants": dev_cal,
-        "mean_pred_fov_deg": float(np.mean(list(fovs.values()))),
-        "sec_per_frame": float(np.mean(times[1:] if len(times) > 1 else times)) if times else "cached",
-    })
-    info_path = out_dir / f"run_info_{a.split}.json"           # keep dev and test run info side by side
-    new = json.load(open(out_dir / "run_info.json"))
-    if new["sec_per_frame"] == "cached" and info_path.exists():  # keep the timing from the run that did inference
-        new["sec_per_frame"] = json.load(open(info_path)).get("sec_per_frame", "cached")
-    json.dump(new, open(info_path, "w"), indent=2); (out_dir / "run_info.json").unlink()
-
-    pd.set_option("display.width", 140)
-    for mk in ("gt>0", "valid"):
-        print(f"\n[{a.split}] mask = {mk}")
-        print(summary[summary["mask"] == mk].drop(columns="mask").round(4).to_string(index=False))
-    print(f"\nMean predicted FoV {np.mean(list(fovs.values())):.1f} deg | saved to {out_dir}/{tag}_*")
+        "model": MODEL_ID, "split": a.split, "dev_frames": len(dev_paths), "test_frames": len(test_paths), "masks": list(MASKS),
+        "flip_test": False, "fine_tuned": False, "input": "raw frames, Depth Pro processor only (1536x1536)",
+        "constants_from_all_dev_frames": constants, "n_blocks": 4, "gap": 2,
+        "mean_pred_fov_deg": float(np.mean(list(fovs.values()))), "sec_per_frame": sec,
+        "timing": "whole prediction per frame, first frame not counted"})
+    (out_dir / "run_info.json").replace(info_path)
+    if a.split == "test":
+        json.dump({"date": datetime.now().isoformat(timespec="seconds"), "n_frames": len(test_paths),
+                   "absrel_mask_A": {r.method: r.absrel for r in summary[summary["mask"] == "A"].itertuples()}},
+                  open(done, "w"), indent=2)
+    print(f"Saved to {out_dir}/{tag}_*")
 
 
 if __name__ == "__main__":
